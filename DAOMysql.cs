@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace DAOMysql
@@ -56,7 +57,6 @@ namespace DAOMysql
                     cmd.Parameters.AddWithValue("@nascimento", nascimento);
                     cmd.Parameters.AddWithValue("@usuario", usuario);
                     cmd.Parameters.AddWithValue("@senha", senha);
-
                     return cmd.ExecuteNonQuery() == 1;
                 }
             }
@@ -66,6 +66,30 @@ namespace DAOMysql
             }
         }
 
+        public bool CadastrarPeriferico(string nome, string modelo, string marca, string garantia, string ano, string precoVenda, string precoAluguel, string status)
+        {
+            string query = @"INSERT INTO perifericos 
+                (nome, modelo, marca, garantia_venda, ano_fabricação, preço_venda, preço_aluguel, status) VALUES (@nome, @modelo, @marca, @garantia, @ano, @venda, @aluguel, @status)";
+            try 
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@nome", nome);
+                    cmd.Parameters.AddWithValue("@modelo", modelo);
+                    cmd.Parameters.AddWithValue("@marca", marca);
+                    cmd.Parameters.AddWithValue("@garantia", garantia);
+                    cmd.Parameters.AddWithValue("@ano", ano);
+                    cmd.Parameters.AddWithValue("@venda", precoVenda);
+                    cmd.Parameters.AddWithValue("@aluguel", precoAluguel);
+                    cmd.Parameters.AddWithValue("@status", status);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao cadastrar o periférico: " + ex.Message);
+            }
+        }
 
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()

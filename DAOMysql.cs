@@ -90,6 +90,30 @@ namespace DAOMysql
                 throw new Exception("Erro ao cadastrar o periférico: " + ex.Message);
             }
         }
+        public bool AlterarPeriferico(string id, string nome, string modelo, string marca, string garantia, string ano, string venda, string aluguel) 
+        {
+            string query = @"UPDATE perifericos SET nome= nome= @nome, modelo= @modelo, marca= @marca, 
+                           garantia_venda= @garantia, ano_fabricação= @ano, preço_venda= @venda, preço_aluguel= @aluguel WHERE id_peri = @id";
+            try
+            {
+                using(MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@nome", nome);
+                    cmd.Parameters.AddWithValue("@modelo", modelo);
+                    cmd.Parameters.AddWithValue("@marca", marca);
+                    cmd.Parameters.AddWithValue("@garantia", garantia);
+                    cmd.Parameters.AddWithValue("@ano", ano);
+                    cmd.Parameters.AddWithValue("@venda", venda);
+                    cmd.Parameters.AddWithValue("@aluguel", aluguel);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao alterar o periférico: " + ex.Message);
+            }
+        }
 
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()

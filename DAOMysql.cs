@@ -46,7 +46,7 @@ namespace DAOMysql
         //Metodos para usar o banco de dados
         public bool InserirFuncionario(string nome, string cpf, string nascimento, string usuario, string senha)
         {
-            string query = "INSERT INTO loginfuncionario (nome, cpf, data_nascimento, usuario, senha) VALUES (@nome, @cpf, @nascimento, @usuario, @senha)";
+            string query = "INSERT INTO funcionarios (nome, cpf, data_nascimento, usuario, senha) VALUES (@nome, @cpf, @nascimento, @usuario, @senha)";
             try
             {
                 //evita vazamento de memória e conexões presas no banco.
@@ -67,7 +67,7 @@ namespace DAOMysql
         }
         public bool AlterarFuncionario(string id, string nome, string cpf, string nascimento, string usuario, string senha)
         {
-            string query = "UPDATE loginfuncionario SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_func = @id";
+            string query = "UPDATE funcionario SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_funcionario = @id";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -89,9 +89,9 @@ namespace DAOMysql
 
         public bool CadastrarPeriferico(string nome, string modelo, string marca, string garantia, string ano, string precoVenda, string precoAluguel, string status)
         {
-            string query = @"INSERT INTO perifericos 
-                (nome, modelo, marca, garantia_venda, ano_fabricacao, preço_venda, preço_aluguel, status) VALUES (@nome, @modelo, @marca, @garantia, @ano, @venda, @aluguel, @status)";
-            try 
+            string query = @"INSERT INTO perifericos (nome, modelo, marca, garantia_venda, ano_fabricacao, preco_venda, preco_aluguel, status) 
+                            VALUES (@nome, @modelo, @marca, @garantia, @ano, @venda, @aluguel, @status)";
+            try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
                 {
@@ -113,8 +113,9 @@ namespace DAOMysql
         }
         public bool AlterarPeriferico(string id, string nome, string modelo, string marca, string garantia, string ano, string venda, string aluguel) 
         {
-            string query = @"UPDATE perifericos SET nome= nome= @nome, modelo= @modelo, marca= @marca, 
-                           garantia_venda= @garantia, ano_fabricação= @ano, preço_venda= @venda, preço_aluguel= @aluguel WHERE id_peri = @id";
+            string query = @"UPDATE perifericos SET nome = @nome, modelo = @modelo, marca = @marca, garantia_venda = @garantia, ano_fabricacao = @ano, 
+                            preco_venda = @venda, preco_aluguel = @aluguel WHERE id_periferico = @id";
+
             try
             {
                 using(MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -137,7 +138,7 @@ namespace DAOMysql
         }
         public bool AtualizarStatusPeriferico(string id, string status)
         {
-            string query = "UPDATE perifericos SET status = @status WHERE id_peri = @id";
+            string query = "UPDATE perifericos SET status = @status WHERE id_periferico = @id";
             using (MySqlCommand cmd = new MySqlCommand(query, mConn))
             {
                 cmd.Parameters.AddWithValue("@id", id);
@@ -148,7 +149,7 @@ namespace DAOMysql
 
         public bool AlugarPeriferico(string nome, string cpf, string telefone, string dataNascimento, string diasAluguel, string valorTotal, string dataDevolucao, string horarioDiaAluguel, string id)
         {
-            string query = @"INSERT INTO aluguel (nome, cpf, telefone, data_nascimento, dias_aluguel, valor_total, data_devolução, horario_e_dia_do_aluguel, id_periferico) 
+            string query = @"INSERT INTO aluguel (nome, cpf, telefone, data_nascimento, dias_aluguel, valor_total, data_devolucao, horario_e_dia_do_aluguel, id_periferico) 
                              VALUES (@nome, @cpf, @telefone, @data_nascimento, @dias_aluguel, @valor_total, @data_devolucao, @horario_e_dia_do_aluguel, @id_periferico)";
             try
             {
@@ -174,8 +175,7 @@ namespace DAOMysql
 
         public bool VenderPeriferico(string nome, string cpf, string telefone, string dataNascimento, string precoVenda, string dataVenda, string idPeriferico)
         {
-            string query = @"INSERT INTO venda 
-                    (nome, cpf, telefone, data_nascimento, preço_venda, dia_venda, id_periferico)
+            string query = @"INSERT INTO venda (nome, cpf, telefone, data_nascimento, preco_venda, dia_venda, id_periferico)
                     VALUES (@nome, @cpf, @telefone, @data_nascimento, @preco_venda, @data_venda, @id_periferico)";
             try
             {
@@ -200,7 +200,7 @@ namespace DAOMysql
 
         public bool FazerLogin(string usuario, string senha)
         {
-            string query = "SELECT * FROM loginfuncionario WHERE usuario = @usuario AND senha = @senha";
+            string query = "SELECT * FROM funcionarios WHERE usuario = @usuario AND senha = @senha";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))

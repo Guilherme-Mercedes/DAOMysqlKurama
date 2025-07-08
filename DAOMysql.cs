@@ -198,6 +198,27 @@ namespace DAOMysql
             }
         }
 
+        public bool FazerLogin(string usuario, string senha)
+        {
+            string query = "SELECT * FROM loginfuncionario WHERE usuario = @usuario AND senha = @senha";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@usuario", usuario);
+                    cmd.Parameters.AddWithValue("@senha", senha);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        return reader.HasRows; // Retorna true se houver resultados
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao fazer login: " + ex.Message);
+            }
+        }
+
 
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()

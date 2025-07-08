@@ -172,6 +172,33 @@ namespace DAOMysql
             }
         }
 
+        public bool VenderPeriferico(string nome, string cpf, string telefone, string dataNascimento, string precoVenda, string dataVenda, string idPeriferico)
+        {
+            string query = @"INSERT INTO venda 
+                    (nome, cpf, telefone, data_nascimento, preço_venda, dia_venda, id_periferico)
+                    VALUES (@nome, @cpf, @telefone, @data_nascimento, @preco_venda, @data_venda, @id_periferico)";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@nome", nome);
+                    cmd.Parameters.AddWithValue("@cpf", cpf);
+                    cmd.Parameters.AddWithValue("@telefone", telefone);
+                    cmd.Parameters.AddWithValue("@data_nascimento", dataNascimento);
+                    cmd.Parameters.AddWithValue("@preco_venda", precoVenda);
+                    cmd.Parameters.AddWithValue("@data_venda", dataVenda);
+                    cmd.Parameters.AddWithValue("@id_periferico", idPeriferico);
+
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao registrar a venda: " + ex.Message);
+            }
+        }
+
+
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()
         public DataTable SelectLogin() => ExecutarSelect("SELECT * FROM loginfuncionario");

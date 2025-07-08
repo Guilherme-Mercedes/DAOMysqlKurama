@@ -114,6 +114,42 @@ namespace DAOMysql
                 throw new Exception("Erro ao alterar o periférico: " + ex.Message);
             }
         }
+        public bool AtualizarStatusPeriferico(string id, string status)
+        {
+            string query = "UPDATE perifericos SET status = @status WHERE id_peri = @id";
+            using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@status", status);
+                return cmd.ExecuteNonQuery() == 1;
+            }
+        }
+
+        public bool AlugarPeriferico(string nome, string cpf, string telefone, string dataNascimento, string diasAluguel, string valorTotal, string dataDevolucao, string horarioDiaAluguel, string id)
+        {
+            string query = @"INSERT INTO aluguel (nome, cpf, telefone, data_nascimento, dias_aluguel, valor_total, data_devolução, horario_e_dia_do_aluguel, id_periferico) 
+                             VALUES (@nome, @cpf, @telefone, @data_nascimento, @dias_aluguel, @valor_total, @data_devolucao, @horario_e_dia_do_aluguel, @id_periferico)";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@nome", nome);
+                    cmd.Parameters.AddWithValue("@cpf", cpf);
+                    cmd.Parameters.AddWithValue("@telefone", telefone);
+                    cmd.Parameters.AddWithValue("@data_nascimento", dataNascimento);
+                    cmd.Parameters.AddWithValue("@dias_aluguel", diasAluguel);
+                    cmd.Parameters.AddWithValue("@valor_total", valorTotal);
+                    cmd.Parameters.AddWithValue("@data_devolucao", dataDevolucao);
+                    cmd.Parameters.AddWithValue("@horario_e_dia_do_aluguel", horarioDiaAluguel);
+                    cmd.Parameters.AddWithValue("@id_periferico", id);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao alugar o periférico: " + ex.Message);
+            }
+        }
 
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()

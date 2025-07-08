@@ -65,9 +65,9 @@ namespace DAOMysql
                 throw new Exception("Erro ao inserir funcionário: " + ex.Message);
             }
         }
-        public bool AlterarFuncionario(string id, string nome, string cpf, string nascimento, string usuario, string senha)
+        public bool AlterarFuncionario(int id, string nome, string cpf, string nascimento, string usuario, string senha)
         {
-            string query = "UPDATE funcionario SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_funcionario = @id";
+            string query = "UPDATE funcionarios SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_funcionario = @id";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -87,7 +87,7 @@ namespace DAOMysql
             }
         }
 
-        public bool CadastrarPeriferico(string nome, string modelo, string marca, string garantia, string ano, string precoVenda, string precoAluguel, string status)
+        public bool CadastrarPeriferico(string nome, string modelo, string marca, string garantia, string ano, decimal precoVenda, decimal precoAluguel, string status)
         {
             string query = @"INSERT INTO perifericos (nome, modelo, marca, garantia_venda, ano_fabricacao, preco_venda, preco_aluguel, status) 
                             VALUES (@nome, @modelo, @marca, @garantia, @ano, @venda, @aluguel, @status)";
@@ -111,7 +111,7 @@ namespace DAOMysql
                 throw new Exception("Erro ao cadastrar o periférico: " + ex.Message);
             }
         }
-        public bool AlterarPeriferico(string id, string nome, string modelo, string marca, string garantia, string ano, string venda, string aluguel) 
+        public bool AlterarPeriferico(string id, string nome, string modelo, string marca, string garantia, string ano, decimal venda, decimal aluguel) 
         {
             string query = @"UPDATE perifericos SET nome = @nome, modelo = @modelo, marca = @marca, garantia_venda = @garantia, ano_fabricacao = @ano, 
                             preco_venda = @venda, preco_aluguel = @aluguel WHERE id_periferico = @id";
@@ -149,7 +149,7 @@ namespace DAOMysql
 
         public bool AlugarPeriferico(string nome, string cpf, string telefone, string dataNascimento, string diasAluguel, string valorTotal, string dataDevolucao, string horarioDiaAluguel, string id)
         {
-            string query = @"INSERT INTO aluguel (nome, cpf, telefone, data_nascimento, dias_aluguel, valor_total, data_devolucao, horario_e_dia_do_aluguel, id_periferico) 
+            string query = @"INSERT INTO alugueis (nome_cliente, cpf_cliente, telefone_cliente, data_nascimento, dias_aluguel, valor_total, data_devolucao, data_hora_aluguel, id_periferico) 
                              VALUES (@nome, @cpf, @telefone, @data_nascimento, @dias_aluguel, @valor_total, @data_devolucao, @horario_e_dia_do_aluguel, @id_periferico)";
             try
             {
@@ -162,7 +162,7 @@ namespace DAOMysql
                     cmd.Parameters.AddWithValue("@dias_aluguel", diasAluguel);
                     cmd.Parameters.AddWithValue("@valor_total", valorTotal);
                     cmd.Parameters.AddWithValue("@data_devolucao", dataDevolucao);
-                    cmd.Parameters.AddWithValue("@horario_e_dia_do_aluguel", horarioDiaAluguel);
+                    cmd.Parameters.AddWithValue("@data_hora_aluguel", horarioDiaAluguel);
                     cmd.Parameters.AddWithValue("@id_periferico", id);
                     return cmd.ExecuteNonQuery() == 1;
                 }
@@ -173,9 +173,9 @@ namespace DAOMysql
             }
         }
 
-        public bool VenderPeriferico(string nome, string cpf, string telefone, string dataNascimento, string precoVenda, string dataVenda, string idPeriferico)
+        public bool VenderPeriferico(string nome, string cpf, string telefone, string dataNascimento, decimal precoVenda, string dataVenda, string idPeriferico)
         {
-            string query = @"INSERT INTO venda (nome, cpf, telefone, data_nascimento, preco_venda, dia_venda, id_periferico)
+            string query = @"INSERT INTO vendas (nome_cliente, cpf_cliente, telefone_cliente, data_nascimento, preco_venda, data_venda, id_periferico)
                     VALUES (@nome, @cpf, @telefone, @data_nascimento, @preco_venda, @data_venda, @id_periferico)";
             try
             {
@@ -220,7 +220,7 @@ namespace DAOMysql
         }
         public bool RemoverAluguelPorId(string id)
         {
-            string query = "DELETE FROM aluguel WHERE id = @id";
+            string query = "DELETE FROM alugueis WHERE id_aluguel = @id";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -236,7 +236,7 @@ namespace DAOMysql
         }
         public bool RemoverFuncionarioPorId(string id)
         {
-            string query = "DELETE FROM loginfuncionario WHERE id_func = @id";
+            string query = "DELETE FROM funcionarios WHERE id_funcionario = @id";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -252,7 +252,7 @@ namespace DAOMysql
         }
         public bool RemoverPerifericoPorId(string id)
         {
-            string query = "DELETE FROM perifericos WHERE id_peri = @id";
+            string query = "DELETE FROM perifericos WHERE id_periferico = @id";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -269,17 +269,17 @@ namespace DAOMysql
 
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()
-        public DataTable SelectLogin() => ExecutarSelect("SELECT * FROM loginfuncionario");
+        public DataTable SelectLogin() => ExecutarSelect("SELECT * FROM funcionarios");
 
         public DataTable SelectPeriferico() => ExecutarSelect("SELECT * FROM perifericos");
 
-        public DataTable SelectVendas() => ExecutarSelect("SELECT * FROM venda");
+        public DataTable SelectVendas() => ExecutarSelect("SELECT * FROM vendas");
 
-        public DataTable SelectAlugueis() => ExecutarSelect("SELECT * FROM aluguel");
+        public DataTable SelectAlugueis() => ExecutarSelect("SELECT * FROM alugueis");
 
-        public DataTable AlugueisUsuario() => ExecutarSelect("SELECT nome, dias_aluguel, data_devolução, valor_total, horario_e_dia_do_aluguel, id_periferico FROM aluguel");
+        public DataTable AlugueisUsuario() => ExecutarSelect("SELECT nome_cliente, dias_aluguel, data_devolução, valor_total, data_hora_aluguel, id_periferico FROM alugueis");
 
-        public DataTable VendasUsuario() => ExecutarSelect("SELECT nome, preço_venda, dia_venda, id_periferico FROM venda");
+        public DataTable VendasUsuario() => ExecutarSelect("SELECT nome_cliente, preço_venda, data_venda, id_periferico FROM vendas");
     }
 
 

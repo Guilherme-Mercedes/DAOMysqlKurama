@@ -65,6 +65,27 @@ namespace DAOMysql
                 throw new Exception("Erro ao inserir funcionário: " + ex.Message);
             }
         }
+        public bool AlterarFuncionario(string id, string nome, string cpf, string nascimento, string usuario, string senha)
+        {
+            string query = "UPDATE loginfuncionario SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_funcionario = @id";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@nome", nome);
+                    cmd.Parameters.AddWithValue("@cpf", cpf);
+                    cmd.Parameters.AddWithValue("@nascimento", nascimento);
+                    cmd.Parameters.AddWithValue("@usuario", usuario);
+                    cmd.Parameters.AddWithValue("@senha", senha);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao alterar funcionário: " + ex.Message);
+            }
+        }
 
         public bool CadastrarPeriferico(string nome, string modelo, string marca, string garantia, string ano, string precoVenda, string precoAluguel, string status)
         {

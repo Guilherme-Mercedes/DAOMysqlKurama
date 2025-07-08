@@ -90,7 +90,7 @@ namespace DAOMysql
         public bool CadastrarPeriferico(string nome, string modelo, string marca, string garantia, string ano, string precoVenda, string precoAluguel, string status)
         {
             string query = @"INSERT INTO perifericos 
-                (nome, modelo, marca, garantia_venda, ano_fabricação, preço_venda, preço_aluguel, status) VALUES (@nome, @modelo, @marca, @garantia, @ano, @venda, @aluguel, @status)";
+                (nome, modelo, marca, garantia_venda, ano_fabricacao, preço_venda, preço_aluguel, status) VALUES (@nome, @modelo, @marca, @garantia, @ano, @venda, @aluguel, @status)";
             try 
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))

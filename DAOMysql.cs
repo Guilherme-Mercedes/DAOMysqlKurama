@@ -67,7 +67,7 @@ namespace DAOMysql
         }
         public bool AlterarFuncionario(string id, string nome, string cpf, string nascimento, string usuario, string senha)
         {
-            string query = "UPDATE loginfuncionario SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_funcionario = @id";
+            string query = "UPDATE loginfuncionario SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_func = @id";
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, mConn))
@@ -218,7 +218,54 @@ namespace DAOMysql
                 throw new Exception("Erro ao fazer login: " + ex.Message);
             }
         }
-
+        public bool RemoverAluguelPorId(string id)
+        {
+            string query = "DELETE FROM aluguel WHERE id = @id";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao remover o aluguel: " + ex.Message);
+            }
+        }
+        public bool RemoverFuncionarioPorId(string id)
+        {
+            string query = "DELETE FROM loginfuncionario WHERE id_func = @id";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao remover funcionário: " + ex.Message);
+            }
+        }
+        public bool RemoverPerifericoPorId(string id)
+        {
+            string query = "DELETE FROM perifericos WHERE id_peri = @id";
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, mConn))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    return cmd.ExecuteNonQuery() == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao remover periférico: " + ex.Message);
+            }
+        }
 
         // Métodos de seleção para diferentes tabelas
         //para facilitar o uso, os nomes dos métodos seguem o padrão Select<Tabela>()

@@ -1,6 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace DAOMysql
@@ -65,7 +64,7 @@ namespace DAOMysql
                 throw new Exception("Erro ao inserir funcionário: " + ex.Message);
             }
         }
-        public bool AlterarFuncionario(int id, string nome, string cpf, string nascimento, string usuario, string senha)
+        public bool AlterarFuncionario(string id, string nome, string cpf, string nascimento, string usuario, string senha)
         {
             string query = "UPDATE funcionarios SET nome = @nome, cpf = @cpf, data_nascimento = @nascimento, usuario = @usuario, senha = @senha WHERE id_funcionario = @id";
             try
